@@ -7,32 +7,51 @@
     <link rel="stylesheet" href="theme.css" />
   </head>
   <body>
+    <div class="container" id="app">
+      <div class="card">
+        <h1>План по изучению Vue.js</h1>
 
-  <div class="container" id="app">
-    <div class="card">
-      <h1>План по изучению Vue.js</h1>
+        <div class="steps">
+          <div class="steps-content">{{ activeStepDescription }}</div>
+          <ul class="steps-list">
+            <li
+              :class="['steps-item', {'done': activeIndex >= index}, {'active': activeIndex === index}]"
+              v-for="(step, index) in steps"
+              :key="index"
+            >
+              <button @click="setActive(index)">{{ index + 1 }}</button>
+              {{ step.title }}
+            </li>
+          </ul>
+          <div>
+            <button v-if="showStartAgain" class="btn" @click="startAgain">
+              Начать заново
+            </button>
 
-      <div class="steps">
-        <div class="steps-content"> {{ currentStep }} </div>
-        <ul class="steps-list">
-          <li
-            :class="['steps-item', {'done': activeIndex >= index}, {'active': activeIndex === index}]"
-            v-for="(step, index) in steps"
-            :key="step.title"
-          >
-            <button @click="setActive(index)">{{ index + 1 }}</button>
-            {{ step.title }}
-          </li>
-        </ul>
-        <div>
-          <button class="btn" :disabled="isButtonDisabled" @click="prev">{{ textOfLeftButton }}</button>
-          <button v-if="!isStartOverButtonActive" class="btn primary" @click="nextStep">{{ textOfRightButton }}</button>
+            <button
+              v-if="showPrevButton"
+              class="btn"
+              :disabled="isPrevButtonDisabled"
+              @click="prev"
+            >
+              Назад
+            </button>
+            <button
+              v-if="showNextButton"
+              class="btn primary"
+              @click="nextStep"
+            >
+              Вперед
+            </button>
+            <button v-if="showFinishButton" class="btn primary" @click="finishSteps">
+              Закончить
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="https://unpkg.com/vue@next"></script>
-  <script src="vue.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="vue.js"></script>
   </body>
 </html>
