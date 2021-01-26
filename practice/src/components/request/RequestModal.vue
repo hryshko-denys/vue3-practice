@@ -31,22 +31,31 @@
     </div>
 
     <button class="btn primary" type="submit" :disabled="isSubmitting">Создать</button>
+    <button class="btn primary" @click="test">Создать</button>
   </form>
 </template>
 
 <script>
 import { useRequestForm } from '@/use/request-form'
+import { useStore } from 'vuex'
 
 export default {
   emits: ['created'],
   setup (_, { emit }) {
+    const store = useStore()
+
     const submit = async values => {
-      console.log(values)
+      await store.dispatch('request/createRequest', values)
       emit('created')
     }
 
+    function test () {
+      console.log(process.env.VUE_APP_FB_URL, 'process.env.VUE_APP_FB_URL')
+    }
+
     return {
-      ...useRequestForm(submit)
+      ...useRequestForm(submit),
+      test
     }
   }
 }

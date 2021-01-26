@@ -4,7 +4,7 @@
       <button class="btn primary" @click="isModalShown = true">Создать</button>
     </template>
 
-    <request-table :requests="[]"></request-table>
+    <request-table :requests="requests"></request-table>
 
     <teleport to="body">
       <app-modal v-if="isModalShown" title="Создать заявку" @close-modal="isModalShown = false">
@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
 
 import AppPage from '@/components/ui/AppPage'
 import AppModal from '@/components/ui/AppModal'
@@ -25,9 +26,13 @@ import RequestModal from '@/components/request/RequestModal'
 export default {
   name: 'Home',
   setup () {
-    const isModalShown = ref(true)
+    const store = useStore()
+    const isModalShown = ref(false)
+
+    const requests = computed(() => store.getters['request/requests'])
     return {
-      isModalShown
+      isModalShown,
+      requests
     }
   },
   components: {
