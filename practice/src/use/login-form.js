@@ -1,15 +1,26 @@
 import { computed, watch } from 'vue'
 import * as yup from 'yup'
 import { useField, useForm } from 'vee-validate'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export function useLoginForm () {
   const passwordLength = 6
+  const store = useStore()
+  const router = useRouter()
 
   const { handleSubmit, isSubmitting, submitCount } = useForm()
   const { value: email, errorMessage: eError, handleBlur: eBlur } = useField('email', yup.string().trim().required('Пожалуйста введите email').email())
   const { value: password, errorMessage: pError, handleBlur: pBlur } = useField('password', yup.string().trim().required('Пожалуйста введите пароль').min(passwordLength, `Минимальная длинна пароля ${passwordLength} символов`))
 
-  const onSubmit = handleSubmit(values => console.log('form:', values))
+  const onSubmit = handleSubmit(async values => {
+    try {
+      await store.dispatch('auth/login', values)
+      router.push('/')
+    } catch (e) {
+      console.log(e)
+    }
+  })
 
   const isTooManyAttempts = computed(() => submitCount.value >= 3)
 
