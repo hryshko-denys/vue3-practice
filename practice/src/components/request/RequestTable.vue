@@ -33,13 +33,6 @@ export default {
       type: Array,
       required: true
     }
-  },
-  setup (props) {
-    document.title = `${props.title} | Клон банка`
-
-    return {
-
-    }
   }
 }
 </script>

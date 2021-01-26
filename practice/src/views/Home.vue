@@ -8,7 +8,7 @@
 
     <teleport to="body">
       <app-modal v-if="isModalShown" title="Создать заявку" @close-modal="isModalShown = false">
-        <request-modal />
+        <request-modal @created="isModalShown = false" />
       </app-modal>
     </teleport>
   </app-page>
