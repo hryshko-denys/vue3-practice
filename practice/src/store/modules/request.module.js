@@ -46,11 +46,37 @@ export default {
         }, { root: true })
       }
     },
-    async loadRequestById ({ commit, dispatch }, id) {
+    async loadRequestById ({ dispatch }, id) {
       try {
         const token = store.getters['auth/token']
         const { data } = await axios.get(`./requests/${id}.json?auth=${token}`)
         return data
+      } catch (e) {
+        dispatch('setMessage', {
+          value: e.message,
+          type: 'danger'
+        }, { root: true })
+      }
+    },
+    async deleteRequestById ({ dispatch }, id) {
+      try {
+        const token = store.getters['auth/token']
+        await axios.delete(`./requests/${id}.json?auth=${token}`)
+      } catch (e) {
+        dispatch('setMessage', {
+          value: e.message,
+          type: 'danger'
+        }, { root: true })
+      }
+    },
+    async updateRequestById ({ dispatch }, request) {
+      try {
+        const token = store.getters['auth/token']
+        await axios.put(`./requests/${request.id}.json?auth=${token}`, request)
+        dispatch('setMessage', {
+          value: 'Заявка успешно обновлена',
+          type: 'primary'
+        }, { root: true })
       } catch (e) {
         dispatch('setMessage', {
           value: e.message,
