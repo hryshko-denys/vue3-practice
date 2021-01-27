@@ -32,6 +32,19 @@ export default {
           type: 'danger'
         }, { root: true })
       }
+    },
+    async loadRequest ({ commit, dispatch }) {
+      try {
+        const token = store.getters['auth/token']
+        const { data } = await axios.get(`./requests.json?auth=${token}`)
+        const requests = Object.keys(data).map(id => ({ ...data[id], id }))
+        commit('SET_REQUESTS', requests)
+      } catch (e) {
+        dispatch('setMessage', {
+          value: e.message,
+          type: 'danger'
+        }, { root: true })
+      }
     }
   },
   getters: {
