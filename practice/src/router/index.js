@@ -22,6 +22,15 @@ const routes = [
     }
   },
   {
+    path: '/request:id',
+    name: 'Request',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Request.vue'),
+    meta: {
+      layout: 'main',
+      auth: true
+    }
+  },
+  {
     path: '/auth',
     name: 'Auth',
     component: () => import(/* webpackChunkName: "about" */ '../views/Auth.vue'),
