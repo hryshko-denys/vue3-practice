@@ -16,8 +16,10 @@
       <td>{{ index + 1}}</td>
       <td>{{ request.fio }}</td>
       <td>{{ request.phone }}</td>
-      <td>{{ request.sum }}</td>
-      <td>{{ request.status }}</td>
+      <td>{{ currency(request.sum) }}</td>
+      <td>
+        <app-status :status="request.status" />
+      </td>
       <td>
         <router-link v-slot="{ navigate }" custom :to="{ name: 'Request', params: { id: request.id } }">
           <button class="btn primary" @click="navigate">Открыть</button>
@@ -30,6 +32,9 @@
 </template>
 
 <script>
+import { currency } from '@/utils/currency-formater'
+
+import AppStatus from '../ui/AppStatus'
 
 export default {
   props: {
@@ -37,6 +42,12 @@ export default {
       type: Array,
       required: true
     }
-  }
+  },
+  setup () {
+    return { currency }
+  },
+  components: { AppStatus }
 }
 </script>
+
+    AppStatus
