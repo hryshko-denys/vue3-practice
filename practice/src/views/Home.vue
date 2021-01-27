@@ -5,6 +5,7 @@
       <button class="btn primary" @click="isModalShown = true">Создать</button>
     </template>
 
+    <request-filter v-model="filter" />
     <request-table :requests="requests"></request-table>
 
     <teleport to="body">
@@ -24,6 +25,7 @@ import AppModal from '@/components/ui/AppModal'
 import AppLoader from '@/components/ui/AppLoader'
 import RequestTable from '@/components/request/RequestTable'
 import RequestModal from '@/components/request/RequestModal'
+import RequestFilter from '@/components/request/RequestFilter'
 
 export default {
   name: 'Home',
@@ -31,8 +33,21 @@ export default {
     const store = useStore()
     const isModalShown = ref(false)
     const loading = ref(false)
+    const filter = ref({})
 
-    const requests = computed(() => store.getters['request/requests'])
+    const requests = computed(() => store.getters['request/requests']
+      .filter(request => {
+        if (filter.value.name) {
+          return request.fio.includes(filter.value.name)
+        }
+        return request
+      })
+      .filter(request => {
+        if (filter.value.status) {
+          return request.status === filter.value.status
+        }
+        return request
+      }))
 
     onMounted(async () => {
       loading.value = true
@@ -43,7 +58,8 @@ export default {
     return {
       isModalShown,
       requests,
-      loading
+      loading,
+      filter
     }
   },
   components: {
@@ -51,7 +67,8 @@ export default {
     RequestTable,
     AppModal,
     RequestModal,
-    AppLoader
+    AppLoader,
+    RequestFilter
   }
 }
 </script>
